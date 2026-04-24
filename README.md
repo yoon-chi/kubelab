@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Command Vault
+
+A Next.js app with two workspaces, selectable from a landing page:
+
+- **Command Vault** (`/vault`) — save, search, tag, and organize shell commands. Backed by MySQL.
+- **Local Cluster** (`/cluster`) — a local Kubernetes cluster (kind, 1 control-plane + 2 workers) with a button to create it and a live `kubectl get nodes` status panel.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Command Vault
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Requires a running MySQL instance. See `schema.sql` for the table definition. Connection settings live in `src/lib/db.ts`.
 
-## Learn More
+## Local Cluster
 
-To learn more about Next.js, take a look at the following resources:
+The `/cluster` page manages a kind cluster named `command-vault`. Requires Docker Desktop and [`kind`](https://kind.sigs.k8s.io/) (`brew install kind`).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Scripts:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+./cluster/up.sh    # create the cluster (idempotent)
+./cluster/down.sh  # delete the cluster
+```
 
-## Deploy on Vercel
+The **Create Cluster** button on `/cluster` runs `up.sh` as a Next.js server action. The Nodes panel shows live `kubectl --context kind-command-vault get nodes -o wide` output.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Topology
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Defined in `cluster/kind-config.yaml`:
+
+- 1 control-plane node
+- 2 worker nodes
+
+### Persistent storage
+
+Each worker bind-mounts `cluster/data/worker{1,2}` (on the host) into `/var/local-path-provisioner` (inside the node). PVCs bound to the default `standard` StorageClass store their data on the host, so files written to PVCs survive `down.sh` → `up.sh`.
+
+Caveats:
+
+- **Only PVC file data persists.** Kubernetes objects (Deployments, Secrets, ConfigMaps, etc.) live in etcd and are wiped on `down.sh`. To keep those too, don't delete the cluster — just stop Docker; the containers come back with state intact.
+- **PVC re-binding is by UID.** After `down.sh` → `up.sh`, a new PVC with the same namespace/name lands in a new directory. Reattaching existing data requires a static PV pointing at the specific path.
+- `cluster/data/` is gitignored.
+
+## Project layout
+
+```
+src/app/
+  page.tsx          # landing page (workspace picker)
+  vault/            # Command Vault UI
+  cluster/          # Local Cluster UI (server actions + live node status)
+  api/              # REST routes backing Command Vault
+cluster/
+  kind-config.yaml  # 1 control-plane + 2 workers, with persistent mounts
+  up.sh / down.sh   # cluster lifecycle scripts
+  data/             # host-side PVC storage (gitignored)
+```
