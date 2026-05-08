@@ -12,7 +12,7 @@ export default function Landing() {
         </p>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <Link
           href="/vault"
           className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-8 hover:border-blue-500 dark:hover:border-blue-400 transition shadow-sm hover:shadow-md bg-white dark:bg-gray-900"
@@ -36,6 +36,45 @@ export default function Landing() {
           </h2>
           <p className="text-sm text-gray-500 dark:text-gray-400">
             A kind cluster with 1 control-plane and 2 worker nodes.
+          </p>
+        </Link>
+
+        <Link
+          href="/ckad"
+          className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-8 hover:border-emerald-500 dark:hover:border-emerald-400 transition shadow-sm hover:shadow-md bg-white dark:bg-gray-900"
+        >
+          <div className="text-4xl mb-4">🎴</div>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400">
+            CKAD Scenarios
+          </h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Practice scenarios grouped by chapter — question on the front, answer on the back.
+          </p>
+        </Link>
+
+        <Link
+          href="/kb"
+          className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-8 hover:border-indigo-500 dark:hover:border-indigo-400 transition shadow-sm hover:shadow-md bg-white dark:bg-gray-900"
+        >
+          <div className="text-4xl mb-4">📚</div>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+            Knowledge Base
+          </h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Notes on each kubernetes resource — grouped, searchable, expandable.
+          </p>
+        </Link>
+
+        <Link
+          href="/cka"
+          className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-8 hover:border-emerald-500 dark:hover:border-emerald-400 transition shadow-sm hover:shadow-md bg-white dark:bg-gray-900"
+        >
+          <div className="text-4xl mb-4">🧭</div>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400">
+            CKA Scenarios
+          </h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Cluster admin scenarios, grouped by chapter and flippable for quick recall.
           </p>
         </Link>
       </div>
