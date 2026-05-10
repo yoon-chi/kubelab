@@ -31,9 +31,9 @@ The `/cluster` page manages a kind cluster named `command-vault`. Requires Docke
 
 ## Local MySQL DB
 
-If you're running this project for the first time, you'll need to load the tables into the database. 
-At the root of the repo:
+If you're running this project for the first time, you must load the tables into the database. 
 
+At the root of the repo, run:
 
 ```
   docker run -d \
@@ -45,12 +45,14 @@ At the root of the repo:
     mysql:8
 ```
   1. Wait for MySQL to be ready (poll mysqladmin ping)
-  2. Then run to create commands, scenarios, and notes tables
+  2. Then run the following to create commands, scenarios, and notes tables
 ```  
   docker exec -i command-vault-mysql mysql command_vault < schema.sql
 ```
 
 The **Create Cluster** button on `/cluster` runs `up.sh` as a Next.js server action. The Nodes panel shows live `kubectl --context kind-command-vault get nodes -o wide` output.
+
+Note: Docker Desktop needs to be running before you run the script. 
 
 ### Topology
 
