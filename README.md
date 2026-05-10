@@ -22,11 +22,32 @@ Requires a running MySQL instance. See `schema.sql` for the table definition. Co
 
 The `/cluster` page manages a kind cluster named `command-vault`. Requires Docker Desktop and [`kind`](https://kind.sigs.k8s.io/) (`brew install kind`).
 
-Scripts:
+### Scripts:
 
 ```bash
 ./cluster/up.sh    # create the cluster (idempotent)
 ./cluster/down.sh  # delete the cluster
+```
+
+## Local MySQL DB
+
+If you're running this project for the first time, you'll need to load the tables into the database. 
+At the root of the repo:
+
+
+```
+  docker run -d \
+    --name command-vault-mysql \
+    -p 3306:3306 \
+    -e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
+    -e MYSQL_DATABASE=command_vault \
+    -v command-vault-mysql-data:/var/lib/mysql \
+    mysql:8
+```
+  1. Wait for MySQL to be ready (poll mysqladmin ping)
+  2. Then run to create commands, scenarios, and notes tables
+```  
+  docker exec -i command-vault-mysql mysql command_vault < schema.sql
 ```
 
 The **Create Cluster** button on `/cluster` runs `up.sh` as a Next.js server action. The Nodes panel shows live `kubectl --context kind-command-vault get nodes -o wide` output.
