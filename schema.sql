@@ -40,3 +40,15 @@ CREATE TABLE IF NOT EXISTS notes (
   INDEX idx_resource (resource),
   INDEX idx_updated_at (updated_at)
 );
+
+-- Concept notes (markdown notes about kubernetes concepts/topics)
+CREATE TABLE IF NOT EXISTS concepts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  category VARCHAR(64) NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_category (category),
+  INDEX idx_updated_at (updated_at)
+);
