@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { RowDataPacket } from "mysql2";
+import { isKubernetesResource } from "@/lib/types";
 
 export async function GET(req: NextRequest) {
   try {
@@ -33,8 +34,11 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { resource, title, content } = body;
 
-    if (!resource || typeof resource !== "string" || resource.trim().length === 0) {
-      return NextResponse.json({ error: "Resource is required" }, { status: 400 });
+    if (!isKubernetesResource(resource)) {
+      return NextResponse.json(
+        { error: "Resource must be a known Kubernetes resource kind" },
+        { status: 400 }
+      );
     }
     if (!title || typeof title !== "string" || title.trim().length === 0) {
       return NextResponse.json({ error: "Title is required" }, { status: 400 });
@@ -43,12 +47,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Content is required" }, { status: 400 });
     }
 
-    const cleanResource = resource.trim().slice(0, 64);
     const cleanTitle = title.trim().slice(0, 255);
 
     const [result] = await pool.execute(
       "INSERT INTO notes (resource, title, content) VALUES (?, ?, ?)",
-      [cleanResource, cleanTitle, content.trim()]
+      [resource, cleanTitle, content.trim()]
     );
 
     const insertResult = result as { insertId: number };

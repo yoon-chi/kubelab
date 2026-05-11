@@ -9,7 +9,6 @@ interface Props {
   onSubmit: (data: NoteInput) => void;
   editingNote?: Note | null;
   defaultResource?: string;
-  knownResources: string[];
 }
 
 export default function NoteForm({
@@ -18,7 +17,6 @@ export default function NoteForm({
   onSubmit,
   editingNote,
   defaultResource,
-  knownResources,
 }: Props) {
   const [resource, setResource] = useState("");
   const [title, setTitle] = useState("");
@@ -31,7 +29,10 @@ export default function NoteForm({
       setTitle(editingNote.title);
       setContent(editingNote.content);
     } else {
-      setResource(defaultResource || "Pod");
+      const fallback = defaultResource && (KUBERNETES_RESOURCES as readonly string[]).includes(defaultResource)
+        ? defaultResource
+        : "Pod";
+      setResource(fallback);
       setTitle("");
       setContent("");
     }
@@ -56,10 +57,6 @@ export default function NoteForm({
 
   if (!isOpen) return null;
 
-  const datalistOptions = Array.from(
-    new Set([...KUBERNETES_RESOURCES, ...knownResources])
-  );
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
@@ -73,23 +70,20 @@ export default function NoteForm({
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Resource <span className="text-red-500">*</span>
+              Kubernetes resource <span className="text-red-500">*</span>
             </label>
-            <input
-              type="text"
-              list="kb-resource-options"
+            <select
               value={resource}
               onChange={(e) => setResource(e.target.value)}
-              placeholder="Pod, Deployment, Service…"
               required
-              maxLength={64}
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
-            />
-            <datalist id="kb-resource-options">
-              {datalistOptions.map((r) => (
-                <option key={r} value={r} />
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+            >
+              {KUBERNETES_RESOURCES.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
               ))}
-            </datalist>
+            </select>
           </div>
 
           <div>

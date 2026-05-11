@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Note, NoteInput } from "@/lib/types";
 import NoteForm from "@/components/NoteForm";
+import Markdown from "@/components/Markdown";
 import Toast, { showToast } from "@/components/Toast";
 
 export default function KnowledgeBasePage() {
@@ -37,8 +38,6 @@ export default function KnowledgeBasePage() {
     }
     return Array.from(map.entries()).sort(([a], [b]) => a.localeCompare(b));
   }, [notes]);
-
-  const knownResources = useMemo(() => grouped.map(([r]) => r), [grouped]);
 
   const visibleGroups = useMemo(
     () =>
@@ -118,11 +117,11 @@ export default function KnowledgeBasePage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            📚 Knowledge Base
+            📚 Kubernetes Resource Knowledge Base
           </h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
             {notes.length} note{notes.length !== 1 ? "s" : ""} across{" "}
-            {grouped.length} resource{grouped.length !== 1 ? "s" : ""}
+            {grouped.length} k8s resource{grouped.length !== 1 ? "s" : ""}
           </p>
         </div>
         <button
@@ -176,7 +175,7 @@ export default function KnowledgeBasePage() {
             No notes yet
           </h3>
           <p className="text-gray-500 dark:text-gray-400 text-sm">
-            Click &ldquo;Add Note&rdquo; to capture your first kubernetes note.
+            Click &ldquo;Add Note&rdquo; to capture your first note about a Kubernetes resource.
           </p>
         </div>
       ) : (
@@ -240,10 +239,8 @@ export default function KnowledgeBasePage() {
                         </div>
                       </header>
                       {isOpen && (
-                        <div className="px-5 pb-4 pt-1 border-t border-gray-100 dark:border-gray-800">
-                          <pre className="whitespace-pre-wrap font-mono text-sm text-gray-800 dark:text-gray-200">
-                            {note.content}
-                          </pre>
+                        <div className="px-5 pb-4 pt-3 border-t border-gray-100 dark:border-gray-800">
+                          <Markdown>{note.content}</Markdown>
                         </div>
                       )}
                     </article>
@@ -264,7 +261,6 @@ export default function KnowledgeBasePage() {
         onSubmit={editingNote ? handleUpdate : handleCreate}
         editingNote={editingNote}
         defaultResource={selectedResource || undefined}
-        knownResources={knownResources}
       />
 
       <Toast />

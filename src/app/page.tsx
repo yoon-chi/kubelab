@@ -66,6 +66,19 @@ export default function Landing() {
         </Link>
 
         <Link
+          href="/concepts"
+          className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-8 hover:border-purple-500 dark:hover:border-purple-400 transition shadow-sm hover:shadow-md bg-white dark:bg-gray-900"
+        >
+          <div className="text-4xl mb-4">🧠</div>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400">
+            Concepts
+          </h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Notes on kubernetes concepts — networking, scheduling, storage, security and more.
+          </p>
+        </Link>
+
+        <Link
           href="/cka"
           className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-8 hover:border-emerald-500 dark:hover:border-emerald-400 transition shadow-sm hover:shadow-md bg-white dark:bg-gray-900"
         >

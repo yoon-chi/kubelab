@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { RowDataPacket, ResultSetHeader } from "mysql2";
+import { isKubernetesResource } from "@/lib/types";
 
 export async function PUT(
   req: NextRequest,
@@ -16,8 +17,11 @@ export async function PUT(
     const body = await req.json();
     const { resource, title, content } = body;
 
-    if (!resource || typeof resource !== "string" || resource.trim().length === 0) {
-      return NextResponse.json({ error: "Resource is required" }, { status: 400 });
+    if (!isKubernetesResource(resource)) {
+      return NextResponse.json(
+        { error: "Resource must be a known Kubernetes resource kind" },
+        { status: 400 }
+      );
     }
     if (!title || typeof title !== "string" || title.trim().length === 0) {
       return NextResponse.json({ error: "Title is required" }, { status: 400 });
@@ -26,12 +30,11 @@ export async function PUT(
       return NextResponse.json({ error: "Content is required" }, { status: 400 });
     }
 
-    const cleanResource = resource.trim().slice(0, 64);
     const cleanTitle = title.trim().slice(0, 255);
 
     const [result] = await pool.execute<ResultSetHeader>(
       "UPDATE notes SET resource = ?, title = ?, content = ? WHERE id = ?",
-      [cleanResource, cleanTitle, content.trim(), numId]
+      [resource, cleanTitle, content.trim(), numId]
     );
 
     if (result.affectedRows === 0) {
