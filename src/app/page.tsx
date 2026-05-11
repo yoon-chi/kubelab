@@ -53,6 +53,19 @@ export default function Landing() {
         </Link>
 
         <Link
+          href="/kubeadm"
+          className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-8 hover:border-orange-500 dark:hover:border-orange-400 transition shadow-sm hover:shadow-md bg-white dark:bg-gray-900"
+        >
+          <div className="text-4xl mb-4">🛠️</div>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400">
+            Kubeadm Cluster Guide
+          </h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Step-by-step instructions to spin up your own multi-node Kubernetes cluster with kubeadm.
+          </p>
+        </Link>
+
+        <Link
           href="/kb"
           className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-8 hover:border-indigo-500 dark:hover:border-indigo-400 transition shadow-sm hover:shadow-md bg-white dark:bg-gray-900"
         >
