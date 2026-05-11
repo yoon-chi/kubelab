@@ -1,9 +1,14 @@
-# Command Vault
+# KubeLab
 
-A Next.js app with two workspaces, selectable from a landing page:
+A Next.js app with multiple workspaces, selectable from a landing page:
 
 - **Command Vault** (`/vault`) — save, search, tag, and organize shell commands. Backed by MySQL.
 - **Local Cluster** (`/cluster`) — a local Kubernetes cluster (kind, 1 control-plane + 2 workers) with a button to create it and a live `kubectl get nodes` status panel.
+- **CKAD Scenarios** (`/ckad`) — practice scenarios grouped by chapter, displayed as flashcards.
+- **CKA Scenarios** (`/cka`) — cluster admin scenarios grouped by chapter, displayed as flashcards.
+- **Knowledge Base** (`/kb`) — markdown notes about Kubernetes resources, grouped and searchable.
+- **Concepts** (`/concepts`) — markdown notes on Kubernetes concepts (networking, scheduling, storage, security, and more).
+- **Kubeadm Cluster Guide** (`/kubeadm`) — step-by-step guide to spin up a multi-node Kubernetes cluster with kubeadm.
 
 ## Getting Started
 
@@ -16,7 +21,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Command Vault
 
-Requires a running MySQL instance. See `schema.sql` for the table definition. Connection settings live in `src/lib/db.ts`.
+Requires a running MySQL instance. Connection settings live in `src/lib/db.ts`.
 
 ## Local Cluster
 
@@ -31,29 +36,27 @@ The `/cluster` page manages a kind cluster named `command-vault`. Requires Docke
 
 ## Local MySQL DB
 
-If you're running this project for the first time, you must load the tables into the database. 
+If you're running this project for the first time, start a MySQL container and load the schema:
 
-At the root of the repo, run:
+```bash
+docker run -d \
+  --name command-vault-mysql \
+  -p 3306:3306 \
+  -e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
+  -e MYSQL_DATABASE=command_vault \
+  -v command-vault-mysql-data:/var/lib/mysql \
+  mysql:8
+```
 
+Wait for MySQL to be ready, then load the schema (creates the `commands`, `scenarios`, `notes`, and `concepts` tables):
+
+```bash
+docker exec -i command-vault-mysql mysql command_vault < schema.sql
 ```
-  docker run -d \
-    --name command-vault-mysql \
-    -p 3306:3306 \
-    -e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
-    -e MYSQL_DATABASE=command_vault \
-    -v command-vault-mysql-data:/var/lib/mysql \
-    mysql:8
-```
-  1. Wait for MySQL to be ready (poll mysqladmin ping)
-  2. Then run the following to create commands, scenarios, and notes tables
-```  
-  docker exec -i command-vault-mysql mysql command_vault < schema.sql 
-  # run this to load a new table from schema.sql in the database
-```
+
+> ⚠️ **Docker Desktop must be running** before executing these commands.
 
 The **Create Cluster** button on `/cluster` runs `up.sh` as a Next.js server action. The Nodes panel shows live `kubectl --context kind-command-vault get nodes -o wide` output.
-
-Note: Docker Desktop needs to be running before you run the script. 
 
 ### Topology
 
@@ -79,7 +82,12 @@ src/app/
   page.tsx          # landing page (workspace picker)
   vault/            # Command Vault UI
   cluster/          # Local Cluster UI (server actions + live node status)
-  api/              # REST routes backing Command Vault
+  ckad/             # CKAD practice scenarios (flashcards)
+  cka/              # CKA practice scenarios (flashcards)
+  kb/               # Knowledge Base (notes per Kubernetes resource)
+  concepts/         # Concepts notes (networking, scheduling, storage, security…)
+  kubeadm/          # Kubeadm Cluster Guide (static step-by-step guide)
+  api/              # REST routes backing Command Vault, scenarios, notes, and concepts
 cluster/
   kind-config.yaml  # 1 control-plane + 2 workers, with persistent mounts
   up.sh / down.sh   # cluster lifecycle scripts
