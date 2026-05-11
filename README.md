@@ -47,7 +47,8 @@ At the root of the repo, run:
   1. Wait for MySQL to be ready (poll mysqladmin ping)
   2. Then run the following to create commands, scenarios, and notes tables
 ```  
-  docker exec -i command-vault-mysql mysql command_vault < schema.sql
+  docker exec -i command-vault-mysql mysql command_vault < schema.sql 
+  # run this to load a new table from schema.sql in the database
 ```
 
 The **Create Cluster** button on `/cluster` runs `up.sh` as a Next.js server action. The Nodes panel shows live `kubectl --context kind-command-vault get nodes -o wide` output.
