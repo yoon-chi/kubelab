@@ -26,20 +26,7 @@ export default function Landing() {
           </p>
         </Link>
 
-        <Link
-          href="/cluster"
-          className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-8 hover:border-blue-500 dark:hover:border-blue-400 transition shadow-sm hover:shadow-md bg-white dark:bg-gray-900"
-        >
-          <div className="text-4xl mb-4">☸️</div>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400">
-            Local Cluster
-          </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            A kind cluster with 1 control-plane and 2 worker nodes.
-          </p>
-        </Link>
-
-        <Link
+<Link
           href="/ckad"
           className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-8 hover:border-emerald-500 dark:hover:border-emerald-400 transition shadow-sm hover:shadow-md bg-white dark:bg-gray-900"
         >
