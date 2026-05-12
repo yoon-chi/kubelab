@@ -83,3 +83,17 @@ export async function deleteNode(name: string): Promise<void> {
   await run("docker", ["rm", "-f", name], { timeout: 30_000 });
   revalidatePath("/nodes");
 }
+
+const SUFFIX_RE = /^[a-z0-9][a-z0-9-]{0,38}$/;
+
+export async function renameNode(name: string, formData: FormData): Promise<void> {
+  if (!NAME_RE.test(name)) throw new Error("invalid name");
+  const raw = String(formData.get("suffix") ?? "").trim().toLowerCase();
+  if (!SUFFIX_RE.test(raw)) {
+    throw new Error("invalid suffix (a-z, 0-9, '-'; must start alphanumeric; ≤ 39 chars)");
+  }
+  const newName = `${NAME_PREFIX}${raw}`;
+  if (newName === name) return;
+  await run("docker", ["rename", name, newName], { timeout: 10_000 });
+  revalidatePath("/nodes");
+}

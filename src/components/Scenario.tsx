@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Scenario as ScenarioType } from "@/lib/types";
 
 interface Props {
@@ -46,8 +48,53 @@ export default function Scenario({ card, onEdit, onDelete }: Props) {
             </span>
             <span className="text-xs text-gray-400">click to flip</span>
           </div>
-          <div className="flex-1 overflow-y-auto text-gray-900 dark:text-white whitespace-pre-wrap font-mono text-sm">
-            {card.answer}
+          <div className="flex-1 overflow-y-auto text-gray-900 dark:text-white text-sm markdown-body">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                code({ className, children, ...props }) {
+                  const isBlock = /\n/.test(String(children));
+                  if (isBlock) {
+                    return (
+                      <pre className="bg-gray-900 text-gray-100 rounded p-3 overflow-x-auto text-xs my-2">
+                        <code className={className} {...props}>{children}</code>
+                      </pre>
+                    );
+                  }
+                  return (
+                    <code className="bg-gray-200 dark:bg-gray-800 rounded px-1 py-0.5 text-xs font-mono" {...props}>
+                      {children}
+                    </code>
+                  );
+                },
+                pre({ children }) {
+                  return <>{children}</>;
+                },
+                h1: ({ children }) => <h1 className="text-lg font-bold mt-2 mb-1">{children}</h1>,
+                h2: ({ children }) => <h2 className="text-base font-bold mt-2 mb-1">{children}</h2>,
+                h3: ({ children }) => <h3 className="text-sm font-bold mt-2 mb-1">{children}</h3>,
+                ul: ({ children }) => <ul className="list-disc list-inside my-1 space-y-0.5">{children}</ul>,
+                ol: ({ children }) => <ol className="list-decimal list-inside my-1 space-y-0.5">{children}</ol>,
+                p: ({ children }) => <p className="my-1">{children}</p>,
+                a: ({ children, href }) => (
+                  <a href={href} target="_blank" rel="noreferrer" className="text-emerald-700 dark:text-emerald-300 underline">
+                    {children}
+                  </a>
+                ),
+                blockquote: ({ children }) => (
+                  <blockquote className="border-l-2 border-emerald-400 pl-3 italic my-2 text-gray-700 dark:text-gray-300">
+                    {children}
+                  </blockquote>
+                ),
+                table: ({ children }) => (
+                  <table className="border-collapse my-2 text-xs">{children}</table>
+                ),
+                th: ({ children }) => <th className="border border-gray-300 dark:border-gray-700 px-2 py-1 font-semibold">{children}</th>,
+                td: ({ children }) => <td className="border border-gray-300 dark:border-gray-700 px-2 py-1">{children}</td>,
+              }}
+            >
+              {card.answer}
+            </ReactMarkdown>
           </div>
           <CardFooter card={card} onEdit={onEdit} onDelete={onDelete} />
         </div>

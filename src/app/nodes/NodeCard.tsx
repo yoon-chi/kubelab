@@ -1,8 +1,13 @@
 import type { NodeInfo } from "./actions";
-import { startNode, stopNode, deleteNode } from "./actions";
+import { startNode, stopNode, deleteNode, renameNode } from "./actions";
+
+const NAME_PREFIX = "kubelab-node-";
 
 export default function NodeCard({ node }: { node: NodeInfo }) {
   const running = node.state === "running";
+  const suffix = node.name.startsWith(NAME_PREFIX)
+    ? node.name.slice(NAME_PREFIX.length)
+    : node.name;
 
   return (
     <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5">
@@ -46,6 +51,32 @@ export default function NodeCard({ node }: { node: NodeInfo }) {
         </div>
       </div>
 
+      <form
+        action={renameNode.bind(null, node.name)}
+        className="flex items-center gap-2 mt-2"
+      >
+        <label
+          htmlFor={`rename-${node.name}`}
+          className="text-xs text-gray-500 dark:text-gray-400 font-mono shrink-0"
+        >
+          {NAME_PREFIX}
+        </label>
+        <input
+          id={`rename-${node.name}`}
+          name="suffix"
+          defaultValue={suffix}
+          required
+          pattern="[a-z0-9][a-z0-9\-]{0,38}"
+          title="a-z, 0-9, '-'; must start alphanumeric; up to 39 chars"
+          className="flex-1 min-w-0 font-mono text-xs px-2 py-1 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white"
+        />
+        <button
+          type="submit"
+          className="px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 text-xs hover:bg-gray-50 dark:hover:bg-gray-800"
+        >
+          Rename
+        </button>
+      </form>
     </section>
   );
 }
