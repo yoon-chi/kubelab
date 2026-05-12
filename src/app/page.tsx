@@ -92,6 +92,19 @@ export default function Landing() {
         </Link>
 
         <Link
+          href="/nodes"
+          className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-8 hover:border-teal-500 dark:hover:border-teal-400 transition shadow-sm hover:shadow-md bg-white dark:bg-gray-900"
+        >
+          <div className="text-4xl mb-4">🐧</div>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-teal-600 dark:group-hover:text-teal-400">
+            Ubuntu Nodes
+          </h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Spin up Ubuntu containers and shell into them from a browser terminal.
+          </p>
+        </Link>
+
+        <Link
           href="/cka"
           className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-8 hover:border-emerald-500 dark:hover:border-emerald-400 transition shadow-sm hover:shadow-md bg-white dark:bg-gray-900"
         >
