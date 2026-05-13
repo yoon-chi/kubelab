@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { Exam, Scenario as ScenarioType, ScenarioInput } from "@/lib/types";
-import Scenario from "@/components/Scenario";
-import ScenarioForm from "@/components/ScenarioForm";
+import { Exam, Lab as LabType, LabInput } from "@/lib/types";
+import Lab from "@/components/Lab";
+import LabForm from "@/components/LabForm";
 import Toast, { showToast } from "@/components/Toast";
 
 const UNCATEGORIZED = "Uncategorized";
@@ -14,21 +14,21 @@ interface Props {
   emoji: string;
 }
 
-export default function ScenarioDeck({ exam, title, emoji }: Props) {
-  const [cards, setCards] = useState<ScenarioType[]>([]);
+export default function LabDeck({ exam, title, emoji }: Props) {
+  const [cards, setCards] = useState<LabType[]>([]);
   const [selectedChapter, setSelectedChapter] = useState<string>("");
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingCard, setEditingCard] = useState<ScenarioType | null>(null);
+  const [editingCard, setEditingCard] = useState<LabType | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchCards = useCallback(async () => {
     try {
-      const res = await fetch(`/api/scenarios?exam=${exam}`);
+      const res = await fetch(`/api/labs?exam=${exam}`);
       if (!res.ok) throw new Error();
       const data = await res.json();
       setCards(data);
     } catch {
-      showToast("Failed to load scenarios", "error");
+      showToast("Failed to load labs", "error");
     } finally {
       setLoading(false);
     }
@@ -39,7 +39,7 @@ export default function ScenarioDeck({ exam, title, emoji }: Props) {
   }, [fetchCards]);
 
   const grouped = useMemo(() => {
-    const map = new Map<string, ScenarioType[]>();
+    const map = new Map<string, LabType[]>();
     for (const c of cards) {
       const key = c.chapter?.trim() ? c.chapter : UNCATEGORIZED;
       if (!map.has(key)) map.set(key, []);
@@ -62,9 +62,9 @@ export default function ScenarioDeck({ exam, title, emoji }: Props) {
     [grouped, selectedChapter]
   );
 
-  const handleCreate = async (data: Omit<ScenarioInput, "exam">) => {
+  const handleCreate = async (data: Omit<LabInput, "exam">) => {
     try {
-      const res = await fetch("/api/scenarios", {
+      const res = await fetch("/api/labs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...data, exam }),
@@ -74,17 +74,17 @@ export default function ScenarioDeck({ exam, title, emoji }: Props) {
         throw new Error(err.error);
       }
       setIsFormOpen(false);
-      showToast("Scenario added!");
+      showToast("Lab added!");
       fetchCards();
     } catch (err) {
-      showToast(err instanceof Error ? err.message : "Failed to add scenario", "error");
+      showToast(err instanceof Error ? err.message : "Failed to add lab", "error");
     }
   };
 
-  const handleUpdate = async (data: Omit<ScenarioInput, "exam">) => {
+  const handleUpdate = async (data: Omit<LabInput, "exam">) => {
     if (!editingCard) return;
     try {
-      const res = await fetch(`/api/scenarios/${editingCard.id}`, {
+      const res = await fetch(`/api/labs/${editingCard.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...data, exam }),
@@ -95,26 +95,26 @@ export default function ScenarioDeck({ exam, title, emoji }: Props) {
       }
       setEditingCard(null);
       setIsFormOpen(false);
-      showToast("Scenario updated!");
+      showToast("Lab updated!");
       fetchCards();
     } catch (err) {
-      showToast(err instanceof Error ? err.message : "Failed to update scenario", "error");
+      showToast(err instanceof Error ? err.message : "Failed to update lab", "error");
     }
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm("Delete this scenario?")) return;
+    if (!confirm("Delete this lab?")) return;
     try {
-      const res = await fetch(`/api/scenarios/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/labs/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error();
-      showToast("Scenario deleted!");
+      showToast("Lab deleted!");
       fetchCards();
     } catch {
-      showToast("Failed to delete scenario", "error");
+      showToast("Failed to delete lab", "error");
     }
   };
 
-  const openEdit = (card: ScenarioType) => {
+  const openEdit = (card: LabType) => {
     setEditingCard(card);
     setIsFormOpen(true);
   };
@@ -132,7 +132,7 @@ export default function ScenarioDeck({ exam, title, emoji }: Props) {
             {emoji} {title}
           </h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-            {cards.length} scenario{cards.length !== 1 ? "s" : ""} across{" "}
+            {cards.length} lab{cards.length !== 1 ? "s" : ""} across{" "}
             {grouped.length} chapter{grouped.length !== 1 ? "s" : ""}
           </p>
         </div>
@@ -143,7 +143,7 @@ export default function ScenarioDeck({ exam, title, emoji }: Props) {
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
-          Add Scenario
+          Add Lab
         </button>
       </div>
 
@@ -178,16 +178,16 @@ export default function ScenarioDeck({ exam, title, emoji }: Props) {
       {loading ? (
         <div className="text-center py-20 text-gray-400">
           <div className="animate-spin inline-block w-8 h-8 border-4 border-gray-300 dark:border-gray-600 border-t-emerald-500 rounded-full mb-4" />
-          <p>Loading scenarios...</p>
+          <p>Loading labs...</p>
         </div>
       ) : cards.length === 0 ? (
         <div className="text-center py-20">
           <div className="text-5xl mb-4">{emoji}</div>
           <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">
-            No scenarios yet
+            No labs yet
           </h3>
           <p className="text-gray-500 dark:text-gray-400 text-sm">
-            Click &ldquo;Add Scenario&rdquo; to create your first scenario.
+            Click &ldquo;Add Lab&rdquo; to create your first lab.
           </p>
         </div>
       ) : (
@@ -199,12 +199,12 @@ export default function ScenarioDeck({ exam, title, emoji }: Props) {
                   {chapter}
                 </h2>
                 <span className="text-xs text-gray-500">
-                  {list.length} scenario{list.length !== 1 ? "s" : ""}
+                  {list.length} lab{list.length !== 1 ? "s" : ""}
                 </span>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 {list.map((card) => (
-                  <Scenario
+                  <Lab
                     key={card.id}
                     card={card}
                     onEdit={openEdit}
@@ -217,7 +217,7 @@ export default function ScenarioDeck({ exam, title, emoji }: Props) {
         </div>
       )}
 
-      <ScenarioForm
+      <LabForm
         isOpen={isFormOpen}
         onClose={() => {
           setIsFormOpen(false);

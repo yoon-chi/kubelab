@@ -1,5 +1,5 @@
-import ScenarioDeck from "@/components/ScenarioDeck";
+import LabDeck from "@/components/LabDeck";
 
 export default function CKADPage() {
-  return <ScenarioDeck exam="ckad" title="CKAD Scenarios" emoji="🎴" />;
+  return <LabDeck exam="ckad" title="CKAD Labs" emoji="🎴" />;
 }

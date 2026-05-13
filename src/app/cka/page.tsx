@@ -1,5 +1,5 @@
-import ScenarioDeck from "@/components/ScenarioDeck";
+import LabDeck from "@/components/LabDeck";
 
 export default function CKAPage() {
-  return <ScenarioDeck exam="cka" title="CKA Scenarios" emoji="🧭" />;
+  return <LabDeck exam="cka" title="CKA Labs" emoji="🧭" />;
 }

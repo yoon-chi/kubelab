@@ -4,8 +4,8 @@ A Next.js app with multiple workspaces, selectable from a landing page:
 
 - **Command Vault** (`/vault`) — save, search, tag, and organize shell commands. Backed by MySQL.
 - **Local Cluster** (`/cluster`) — a local Kubernetes cluster (kind, 1 control-plane + 2 workers) with a button to create it and a live `kubectl get nodes` status panel.
-- **CKAD Scenarios** (`/ckad`) — practice scenarios grouped by chapter, displayed as flashcards.
-- **CKA Scenarios** (`/cka`) — cluster admin scenarios grouped by chapter, displayed as flashcards.
+- **CKAD Labs** (`/ckad`) — practice labs grouped by chapter, displayed as flashcards.
+- **CKA Labs** (`/cka`) — cluster admin labs grouped by chapter, displayed as flashcards.
 - **Knowledge Base** (`/kb`) — markdown notes about Kubernetes resources, grouped and searchable.
 - **Concepts** (`/concepts`) — markdown notes on Kubernetes concepts (networking, scheduling, storage, security, and more).
 - **Kubeadm Cluster Guide** (`/kubeadm`) — step-by-step guide to spin up a multi-node Kubernetes cluster with kubeadm.
@@ -82,12 +82,12 @@ src/app/
   page.tsx          # landing page (workspace picker)
   vault/            # Command Vault UI
   cluster/          # Local Cluster UI (server actions + live node status)
-  ckad/             # CKAD practice scenarios (flashcards)
-  cka/              # CKA practice scenarios (flashcards)
+  ckad/             # CKAD practice labs (flashcards)
+  cka/              # CKA practice labs (flashcards)
   kb/               # Knowledge Base (notes per Kubernetes resource)
   concepts/         # Concepts notes (networking, scheduling, storage, security…)
   kubeadm/          # Kubeadm Cluster Guide (static step-by-step guide)
-  api/              # REST routes backing Command Vault, scenarios, notes, and concepts
+  api/              # REST routes backing Command Vault, labs, notes, and concepts
 cluster/
   kind-config.yaml  # 1 control-plane + 2 workers, with persistent mounts
   up.sh / down.sh   # cluster lifecycle scripts

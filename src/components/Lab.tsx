@@ -3,15 +3,15 @@
 import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Scenario as ScenarioType } from "@/lib/types";
+import { Lab as LabType } from "@/lib/types";
 
 interface Props {
-  card: ScenarioType;
-  onEdit: (card: ScenarioType) => void;
+  card: LabType;
+  onEdit: (card: LabType) => void;
   onDelete: (id: number) => void;
 }
 
-export default function Scenario({ card, onEdit, onDelete }: Props) {
+export default function Lab({ card, onEdit, onDelete }: Props) {
   const [flipped, setFlipped] = useState(false);
 
   useEffect(() => {
@@ -108,8 +108,8 @@ function CardFooter({
   onEdit,
   onDelete,
 }: {
-  card: ScenarioType;
-  onEdit: (card: ScenarioType) => void;
+  card: LabType;
+  onEdit: (card: LabType) => void;
   onDelete: (id: number) => void;
 }) {
   return (

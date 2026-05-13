@@ -17,7 +17,7 @@ export interface CommandInput {
 
 export type Exam = "cka" | "ckad";
 
-export interface Scenario {
+export interface Lab {
   id: number;
   exam: Exam;
   question: string;
@@ -27,7 +27,7 @@ export interface Scenario {
   updated_at: string;
 }
 
-export interface ScenarioInput {
+export interface LabInput {
   exam: Exam;
   question: string;
   answer: string;

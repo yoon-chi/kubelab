@@ -1,20 +1,20 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Scenario, ScenarioInput } from "@/lib/types";
+import { Lab, LabInput } from "@/lib/types";
 
-type ScenarioFormData = Omit<ScenarioInput, "exam">;
+type LabFormData = Omit<LabInput, "exam">;
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: ScenarioFormData) => void;
-  editingCard?: Scenario | null;
+  onSubmit: (data: LabFormData) => void;
+  editingCard?: Lab | null;
   knownChapters: string[];
   defaultChapter?: string;
 }
 
-export default function ScenarioForm({
+export default function LabForm({
   isOpen,
   onClose,
   onSubmit,
@@ -66,7 +66,7 @@ export default function ScenarioForm({
       <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white dark:bg-gray-800 px-6 pt-6 pb-4 border-b border-gray-100 dark:border-gray-700 rounded-t-2xl">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-            {editingCard ? "Edit Scenario" : "Add Scenario"}
+            {editingCard ? "Edit Lab" : "Add Lab"}
           </h2>
         </div>
 
@@ -135,7 +135,7 @@ export default function ScenarioForm({
               type="submit"
               className="flex-1 px-4 py-2.5 rounded-lg bg-emerald-600 text-white font-medium hover:bg-emerald-700 active:bg-emerald-800 transition"
             >
-              {editingCard ? "Save Changes" : "Add Scenario"}
+              {editingCard ? "Save Changes" : "Add Lab"}
             </button>
           </div>
         </form>

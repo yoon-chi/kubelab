@@ -39,7 +39,7 @@ export async function PUT(
     );
 
     if (result.affectedRows === 0) {
-      return NextResponse.json({ error: "Scenario not found" }, { status: 404 });
+      return NextResponse.json({ error: "Lab not found" }, { status: 404 });
     }
 
     const [rows] = await pool.query<RowDataPacket[]>(
@@ -49,8 +49,8 @@ export async function PUT(
 
     return NextResponse.json(rows[0]);
   } catch (error) {
-    console.error("PUT /api/scenarios/[id] error:", error);
-    return NextResponse.json({ error: "Failed to update scenario" }, { status: 500 });
+    console.error("PUT /api/labs/[id] error:", error);
+    return NextResponse.json({ error: "Failed to update lab" }, { status: 500 });
   }
 }
 
@@ -71,12 +71,12 @@ export async function DELETE(
     );
 
     if (result.affectedRows === 0) {
-      return NextResponse.json({ error: "Scenario not found" }, { status: 404 });
+      return NextResponse.json({ error: "Lab not found" }, { status: 404 });
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("DELETE /api/scenarios/[id] error:", error);
-    return NextResponse.json({ error: "Failed to delete scenario" }, { status: 500 });
+    console.error("DELETE /api/labs/[id] error:", error);
+    return NextResponse.json({ error: "Failed to delete lab" }, { status: 500 });
   }
 }

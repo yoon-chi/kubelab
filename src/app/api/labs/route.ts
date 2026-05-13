@@ -36,9 +36,9 @@ export async function GET(req: NextRequest) {
     const [rows] = await pool.query<RowDataPacket[]>(query, params);
     return NextResponse.json(rows);
   } catch (error) {
-    console.error("GET /api/scenarios error:", error);
+    console.error("GET /api/labs error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch scenarios" },
+      { error: "Failed to fetch labs" },
       { status: 500 }
     );
   }
@@ -78,9 +78,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(rows[0], { status: 201 });
   } catch (error) {
-    console.error("POST /api/scenarios error:", error);
+    console.error("POST /api/labs error:", error);
     return NextResponse.json(
-      { error: "Failed to create scenario" },
+      { error: "Failed to create lab" },
       { status: 500 }
     );
   }

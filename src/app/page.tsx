@@ -32,10 +32,10 @@ export default function Landing() {
         >
           <div className="text-4xl mb-4">🎴</div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400">
-            CKAD Scenarios
+            CKAD Labs
           </h2>
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Practice scenarios grouped by chapter — question on the front, answer on the back.
+            Practice labs grouped by chapter — question on the front, answer on the back.
           </p>
         </Link>
 
@@ -97,10 +97,10 @@ export default function Landing() {
         >
           <div className="text-4xl mb-4">🧭</div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400">
-            CKA Scenarios
+            CKA Labs
           </h2>
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Cluster admin scenarios, grouped by chapter and flippable for quick recall.
+            Cluster admin labs, grouped by chapter and flippable for quick recall.
           </p>
         </Link>
       </div>
