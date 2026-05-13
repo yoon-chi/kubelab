@@ -124,7 +124,8 @@ export const KUBERNETES_CONCEPTS = [
   "Multi-tenancy",
   "Troubleshooting",
   "DevOps & CI/CD & GitOps",
-  "Deployments"
+  "Deployments",
+  "API"
 ] as const;
 
 export type KubernetesConcept = (typeof KUBERNETES_CONCEPTS)[number];
